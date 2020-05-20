@@ -9,6 +9,8 @@ import { PostsComponent } from './posts/posts.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostFormComponent } from './post-form/post-form.component';
+import { MarketplaceComponent } from './marketplace/marketplace.component';
+import { MarketplaceFormComponent } from './marketplace-form/marketplace-form.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { PostFormComponent } from './post-form/post-form.component';
     PostsComponent,
     ProfileComponent,
     CommentComponent,
-    PostFormComponent
+    PostFormComponent,
+    MarketplaceComponent,
+    MarketplaceFormComponent
   ],
   imports: [
     BrowserModule,
