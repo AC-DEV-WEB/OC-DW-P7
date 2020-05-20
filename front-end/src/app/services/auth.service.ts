@@ -6,5 +6,10 @@ import { Injectable } from '@angular/core';
 export class AuthService {
 
   public isAuth = false;
+  
   constructor() { }
+
+  public getAuth() {
+    return this.isAuth;
+  }
 }

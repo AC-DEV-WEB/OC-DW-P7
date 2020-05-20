@@ -11,6 +11,7 @@ import { CommentComponent } from './comment/comment.component';
 import { PostFormComponent } from './post-form/post-form.component';
 import { MarketplaceComponent } from './marketplace/marketplace.component';
 import { MarketplaceFormComponent } from './marketplace-form/marketplace-form.component';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MarketplaceFormComponent } from './marketplace-form/marketplace-form.co
     CommentComponent,
     PostFormComponent,
     MarketplaceComponent,
-    MarketplaceFormComponent
+    MarketplaceFormComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

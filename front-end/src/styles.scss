@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+/* importations des polices d'écriture */
+@font-face {
+  font-family: 'Nevis-Bold';
+  src:url('assets/fonts/Nevis-Bold.ttf.woff') format('woff'),
+    url('assets/fonts/Nevis-Bold.ttf.svg#Nevis-Bold') format('svg'),
+    url('assets/fonts/Nevis-Bold.ttf.eot'),
+    url('assets/fonts/Nevis-Bold.ttf.eot?#iefix') format('embedded-opentype'); 
+  font-weight: normal;
+  font-style: normal;
+}

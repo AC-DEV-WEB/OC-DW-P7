@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'forum', component: PostsComponent, canActivate: [AuthGuard] },
   { path: 'marketplace', component: PostsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/login' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', component: LoginComponent }
 ];
 
