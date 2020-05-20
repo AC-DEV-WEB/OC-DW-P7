@@ -1,3 +1,5 @@
+@charset "UTF-8";
+
 /* importations des polices d'écriture */
 @font-face {
   font-family: 'Nevis-Bold';
@@ -7,4 +9,14 @@
     url('assets/fonts/Nevis-Bold.ttf.eot?#iefix') format('embedded-opentype'); 
   font-weight: normal;
   font-style: normal;
+}
+
+/* mise en forme du corps */
+html, body {
+  min-height: 100%
+}
+
+body {
+  background-color: white;
+  padding-bottom: 88px;
 }
