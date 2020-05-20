@@ -8,9 +8,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  public menu = false;
   constructor(public auth: AuthService) { }
 
   ngOnInit(): void {
+  }
+
+  public toggleMenu() {
+    this.menu = !this.menu;
   }
 
 }
