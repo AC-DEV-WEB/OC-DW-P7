@@ -4,20 +4,21 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PostsComponent } from './posts/posts.component';
 import { ProfileComponent } from './profile/profile.component';
-import { AuthGuard } from './guard/auth-guard';
+import { AuthGuard } from './guard/auth.guard';
 
+// définit les routes de l'application
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'forum', component: PostsComponent, canActivate: [AuthGuard] },
-  { path: 'marketplace', component: PostsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', component: LoginComponent }
+  { path: '', pathMatch: 'full', redirectTo: '/forum' },
+  { path: '**', redirectTo: 'forum'}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

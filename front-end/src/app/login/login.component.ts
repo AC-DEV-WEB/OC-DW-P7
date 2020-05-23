@@ -11,12 +11,20 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
+  loading: boolean;
   errorMsg: string;
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) { 
-    
+  constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) { }
+
+  get email() {
+    return this.loginForm.get('email');
   }
 
+  get password() {
+    return this.loginForm.get('password');
+  }
+
+  // initialise les données du formulaire de connexion d'un utilisateur existant
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -24,16 +32,21 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // traite la réponse du serveur pour la connexion d'un utilisateur existant
   onLogin() {
-    this.auth.login(this.loginForm.get('email').value,
-      this.loginForm.get('password').value)
-    // .then(
-    //   () => {
-    //     this.router.navigateByUrl('/forum');
-    //   })
-    // .catch(
-    //   (error) => {
-    //     this.errorMsg = error;
-    // });
+    this.loading = true;
+    const email = this.loginForm.get('email').value;
+    const password = this.loginForm.get('password').value;
+    this.auth.login(email, password).then(
+      () => {
+        this.loading = false;
+        this.router.navigate(['/forum']);
+      }
+    ).catch(
+      (error) => {
+        this.loading = false;
+        this.errorMsg = error.error.error;
+      }
+    );
   }
 }

@@ -10,9 +10,9 @@ import { PostsComponent } from './posts/posts.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CommentComponent } from './comment/comment.component';
 import { PostFormComponent } from './post-form/post-form.component';
-import { MarketplaceComponent } from './marketplace/marketplace.component';
-import { MarketplaceFormComponent } from './marketplace-form/marketplace-form.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -23,16 +23,15 @@ import { HeaderComponent } from './header/header.component';
     ProfileComponent,
     CommentComponent,
     PostFormComponent,
-    MarketplaceComponent,
-    MarketplaceFormComponent,
     HeaderComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
