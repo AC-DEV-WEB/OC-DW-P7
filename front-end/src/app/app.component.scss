@@ -1,6 +1,7 @@
 /* mise en forme du pied de page */
 #footer {
-  background-color: #F3F3F3;
+  background-color: lighten($color: #15202B, $amount: 6);
+  color: white;
   padding-top: 28px;
   padding-bottom: 0px;
   position:fixed;

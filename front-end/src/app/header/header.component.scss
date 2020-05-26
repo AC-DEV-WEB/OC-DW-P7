@@ -8,3 +8,19 @@
 #navbarCollapse {
   font-size: 1.4rem;
 }
+
+.navbar-custom {
+  background-color: lighten($color: #15202B, $amount: 6);
+}
+
+.navbar-custom .navbar-brand, .navbar-custom .navbar-text {
+  color: rgba(255,255,255,.8);
+}
+
+.navbar-custom .navbar-nav .nav-link {
+  color: rgba(255,255,255,.5);
+}
+
+.navbar-custom .nav-link.active, .navbar-custom .nav-item:hover .nav-link {
+  color: white !important;
+}
