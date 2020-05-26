@@ -50,7 +50,7 @@
           </div>
 
           <div class="col-md-6 offset-md-4">
-            <button class="btn btn-success" (click)="onRegister()" [disabled]="registerForm.invalid">S'inscrire</button>
+            <button class="btn btn-green" (click)="onRegister()" [disabled]="registerForm.invalid">S'inscrire</button>
             <p class="text-danger mt-2" *ngIf="errorMsg">{{ errorMsg }}</p>
           </div>
         </form>

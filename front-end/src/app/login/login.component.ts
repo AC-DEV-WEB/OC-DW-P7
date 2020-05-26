@@ -24,15 +24,22 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  // initialise les données du formulaire de connexion d'un utilisateur existant
   ngOnInit() {
+    // on redirige l'utilisateur vers la page du forum si celui-ci est déjà authentifié
+    if (this.auth.loggedIn()) {
+      this.router.navigate(['/forum']);
+    } else {
+      this.router.navigate(['/login']);
+    };
+
+    // on initialise les données du formulaire de connexion d'un utilisateur existant
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
-  // traite la réponse du serveur pour la connexion d'un utilisateur existant
+  // on traite la réponse du serveur pour la connexion d'un utilisateur existant
   onLogin() {
     this.loading = true;
     const email = this.loginForm.get('email').value;

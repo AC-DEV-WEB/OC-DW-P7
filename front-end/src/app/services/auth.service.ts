@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../models/User.model';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -8,8 +9,8 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private userId: string;
-  private authToken: string;
+  // on instancie un subject de type "User" à la valeur null
+  public userSubject = new BehaviorSubject<User>(null);
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -20,7 +21,19 @@ export class AuthService {
 
   // renvoie le numéro d'identification de l'utilisateur
   public getUserId() {
-    return this.userId;
+    return JSON.parse(localStorage.getItem('userId'));
+  }
+
+  // renvoie l'utilisateur depuis le serveur
+  public getUserServerId(id: number) {
+    this.http.get('http://localhost:3000/api/profile/'+id).subscribe(
+      (res: User) => {
+        this.setUser(res);
+      }, 
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   // contrôle la présence du token d'authentification
@@ -29,9 +42,16 @@ export class AuthService {
   }
 
   // envoie une requête d'enregistrement d'un nouvel utilisateur
-  public register(firstName: string, lastName: string, email: string, password: string) {
+  public register(user: User) {
     return new Promise((resolve, reject) => {
-      this.http.post('http://localhost:3000/api/auth/register', {firstName: firstName, lastName: lastName, email: email, password: password}).subscribe(
+      this.http.post('http://localhost:3000/api/auth/register', {
+        firstName: user.firstName, 
+        lastName: user.lastName, 
+        email: user.email, 
+        password: user.password, 
+        imageUrl: user.imageUrl,
+        isAdmin: user.isAdmin
+      }).subscribe(
         (res: { message: string }) => {
           resolve(res);
         },
@@ -47,11 +67,12 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.http.post('http://localhost:3000/api/auth/login', {email: email, password: password}).subscribe(
         (res: {userId: string, token: string}) => {
-          this.userId = res.userId;
-          this.authToken = res.token;
           
           // on stock le token d'authentification dans le localStorage
           localStorage.setItem('token', res.token);
+
+          // on stock le numéro d'identification de l'utilisateur dans le localStorage
+          localStorage.setItem('userId', res.userId);
           resolve();
         },
         (error) => {
@@ -63,10 +84,33 @@ export class AuthService {
 
   // déconnecte l'utilisateur
   public logout() {
-    // supprime le token d'authentification du localStorage
-    localStorage.removeItem('token');
+    // on efface le localStorage
+    localStorage.clear();
 
     // redirige l'utilisateur vers la page de connexion
     this.router.navigate(['/login']);
+  }
+
+  // envoie une requête au serveur pour la modification du profile utilisateur
+  public editUserProfile(id: number, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', image);
+    
+    return this.http.put<any>('http://localhost:3000/api/profile/edit/'+id, formData);
+  }
+
+  // envoie une requête au serveur pour la suppression du profile utilisateur
+  public deleteUserProfile(id: number): Observable<any> {    
+    return this.http.delete<any>('http://localhost:3000/api/profile/delete/'+id);
+  }
+
+  // on transforme le subject "User" en observable
+  public getUser(): Observable<User> {
+    return this.userSubject.asObservable();
+  }
+
+  // on met à jour le subject "User"
+  public setUser(user: User) {
+    this.userSubject.next(user);
   }
 }

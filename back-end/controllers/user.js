@@ -1,8 +1,10 @@
 // package de cryptage du mot de passe
 const bcrypt = require('bcrypt');
 
-// charge les modèles
+// on importe les modèles de données
 const db = require("../models");
+
+// on initialise la base de données
 const User = db.User;
 
 // package pour la gestion des tokens
@@ -17,7 +19,9 @@ exports.register = (req, res, next) => {
       lastName: req.body.lastName,
       firstName: req.body.firstName,
       email: req.body.email,
-      password: hash
+      password: hash,
+      imageUrl: req.body.imageUrl,
+      isAdmin: req.body.isAdmin
     };
 
     // on sauvegarde l'utilisateur
@@ -31,36 +35,36 @@ exports.register = (req, res, next) => {
 // connexion des utilisateurs existant
 exports.login = (req, res, next) => {
   User.findOne({ where: { email: req.body.email } })
-    .then(user => {
-      if (!user) {
-        return res.status(401).json({ error: 'Utilisateur non trouvé !' });
-      }
+  .then(user => {
+    if (!user) {
+      return res.status(401).json({ error: 'Utilisateur non trouvé !' });
+    }
 
-      // on compare l'utilisateur déjà enregistré avec celui qui se connecte
-      bcrypt.compare(req.body.password, user.password)
-        .then(valid => {
-          // on retourne une erreur si ce n'est pas valable
-          if (!valid) {
-            return res.status(401).json({ error: 'Mot de passe incorrect !' });
-          }
+    // on compare l'utilisateur déjà enregistré avec celui qui se connecte
+    bcrypt.compare(req.body.password, user.password)
+      .then(valid => {
+        // on retourne une erreur si ce n'est pas valable
+        if (!valid) {
+          return res.status(401).json({ error: 'Mot de passe incorrect !' });
+        }
 
-          // on encode les données à l'intérieur du token avec une clé secrète
-          let token = jwt.sign(
-            { userId: user.id },
-            'eyJ1c2VySWQiOjU2LCJpYXQiOjE1OTAxODUwMDYsImV4cCI6MTU5MDI3MTQwNn0',
-            { expiresIn: '24h' }
-          )
+        // on encode les données à l'intérieur du token avec une clé secrète
+        let token = jwt.sign(
+          { userId: user.id },
+          'eyJ1c2VySWQiOjU2LCJpYXQiOjE1OTAxODUwMDYsImV4cCI6MTU5MDI3MTQwNn0',
+          { expiresIn: '24h' }
+        )
 
-          // on définit le token au sein du header
-          res.setHeader('Authorization', 'Bearer ' + token);
+        // on définit le token au sein du header
+        res.setHeader('Authorization', 'Bearer ' + token);
 
-          // on renvoie l'utilisateur avec son token d'authentification
-          res.status(200).json({
-            userId: user.id,
-            token: token
-          });
-        })
-        .catch(error => res.status(500).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
+        // on renvoie l'utilisateur avec son token d'authentification
+        res.status(200).json({
+          userId: user.id,
+          token: token
+        });
+      })
+      .catch(error => res.status(500).json({ error }));
+  })
+  .catch(error => res.status(500).json({ error }));
 };

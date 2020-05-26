@@ -20,3 +20,88 @@ body {
   background-color: white;
   padding-bottom: 88px;
 }
+
+/* mise en forme des boutons vert */
+.btn-green {
+  color:#fff;
+  background-color:#088024;
+  border-color:#088024
+}
+
+.btn-green:hover {
+  color:#fff;
+  background-color:#218838;
+  border-color:#1e7e34
+}
+
+.btn-green.focus, .btn-green:focus {
+  color:#fff;
+  background-color:#218838;
+  border-color:#1e7e34;
+  box-shadow:0 0 0 .2rem rgba(72,180,97,.5)
+}
+
+.btn-green:hover {
+  color:#fff;
+  background-color:#218838;
+  border-color:#1e7e34
+}
+
+.btn-green.focus, .btn-green:focus{
+  color:#fff;
+  background-color:#218838;
+  border-color:#1e7e34;
+  box-shadow:0 0 0 .2rem rgba(72,180,97,.5)
+}
+
+.btn-green.disabled, .btn-green:disabled{
+  color:#fff;
+  background-color:#088024;
+  border-color:#088024
+}
+
+.btn-green:not(:disabled):not(.disabled).active, .btn-green:not(:disabled):not(.disabled):active, .show>.btn-green.dropdown-toggle {
+  color:#fff;
+  background-color:#1e7e34;
+  border-color:#1c7430
+}
+
+.btn-green:not(:disabled):not(.disabled).active:focus,.btn-green:not(:disabled):not(.disabled):active:focus,.show>.btn-green.dropdown-toggle:focus {
+  box-shadow:0 0 0 .2rem rgba(72,180,97,.5)
+}
+
+/* mise en forme des boutons bleu */
+.btn-blue { 
+  color:#fff;
+  background-color:#026ee0;
+  border-color:#026ee0
+}
+
+.btn-blue:hover {
+  color:#fff;
+  background-color:#0069d9;
+  border-color:#0062cc
+}
+
+.btn-blue.focus, .btn-blue:focus {
+  color:#fff;
+  background-color:#0069d9;
+  border-color:#0062cc;
+  box-shadow:0 0 0 .2rem rgba(38,143,255,.5)
+}
+
+.btn-blue.disabled, .btn-blue:disabled { 
+  color:#fff;
+  background-color:#026ee0;
+  border-color:#026ee0
+}
+
+.btn-blue:not(:disabled):not(.disabled).active, .btn-blue:not(:disabled):not(.disabled):active, .show>.btn-blue.dropdown-toggle {
+  color:#fff;
+  background-color:#0062cc;
+  border-color:#005cbf
+}
+
+.btn-blue:not(:disabled):not(.disabled).active:focus, .btn-blue:not(:disabled):not(.disabled):active:focus, .show>.btn-blue.dropdown-toggle:focus {
+  box-shadow:0 0 0 .2rem rgba(38,143,255,.5)
+}

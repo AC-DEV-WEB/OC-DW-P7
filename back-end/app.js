@@ -13,6 +13,9 @@ const path = require('path');
 // déclaration de la route pour l'authentification
 const userRoutes = require('./routes/user');
 
+// déclaration de la route pour le profil utilisateur
+const profileRoutes = require('./routes/profile');
+
 // on créé l'appilcation express
 const app = express();
 
@@ -41,6 +44,9 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // middleware qui définit la route pour l'authentification
 app.use('/api/auth', userRoutes);
+
+// middleware qui définit la route pour le profil utilisateur
+app.use('/api/profile', profileRoutes);
 
 // on exporte express
 module.exports = app;

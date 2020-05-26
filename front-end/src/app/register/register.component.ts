@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { PasswordValidator } from './password.validator';
+import { User } from '../models/User.model';
 
 @Component({
   selector: 'app-register',
@@ -33,7 +34,7 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.get('password');
   }
 
-  // initialise les données du formulaire d'enregistrement d'un nouvel utilisateur
+  // on initialise les données du formulaire d'enregistrement d'un nouvel utilisateur
   ngOnInit() {
     this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
@@ -44,16 +45,21 @@ export class RegisterComponent implements OnInit {
     }, { validator: PasswordValidator });
   }
 
-  // traite la réponse du serveur pour l'enregistrement d'un nouvel utilisateur
+  // on traite la réponse du serveur pour l'enregistrement d'un nouvel utilisateur
   onRegister() {
+    let user: User = new User;
+    user.firstName = this.registerForm.get('firstName').value;
+    user.lastName = this.registerForm.get('lastName').value;
+    user.email = this.registerForm.get('email').value;
+    user.password = this.registerForm.get('password').value;
+    user.imageUrl = '../assets/images/blank-profile.png';
+    user.isAdmin = false;
+
     this.loading = true;
-    const firstName = this.registerForm.get('firstName').value;
-    const lastName = this.registerForm.get('lastName').value;
-    const email = this.registerForm.get('email').value;
-    const password = this.registerForm.get('password').value;
-    this.auth.register(firstName, lastName, email, password).then(
+
+    this.auth.register(user).then(
       (res: { message: string }) => {
-        this.auth.login(email, password).then(
+        this.auth.login(user.email, user.password).then(
           () => {
             this.loading = false;
             this.router.navigate(['/forum']);
