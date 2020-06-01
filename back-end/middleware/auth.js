@@ -9,11 +9,18 @@ module.exports = (req, res, next) => {
     // on décode le token avec la clé secrète
     const decodedToken = jwt.verify(token, 'eyJ1c2VySWQiOjU2LCJpYXQiOjE1OTAxODUwMDYsImV4cCI6MTU5MDI3MTQwNn0');
 
-    // on vérifie si le numéro d'identification de l'utilisateur est différent du coprs de la requête
-    if (!decodedToken.userId) return res.status(401).send('Identifiant non valable !');
-    req.params.id = decodedToken.userId;
-    next();
+    // on récupère l'user ID décodé
+    const userId = decodedToken.userId;
 
+    // on récupère l'user ID dans le paramètre de la requête
+    const reqUserId = parseInt(req.params.id)
+
+    // on vérifie si l'user ID est différent du paramètre de la requête
+    if (reqUserId && reqUserId !== userId || reqUserId === undefined || reqUserId === null) {
+      throw 'Identifiant non valable !';
+    } else {
+      next();
+    }
   } catch (error) {
     res.status(401).json({ error: error | 'Requête non authentifiée !' });
   }
