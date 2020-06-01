@@ -73,6 +73,7 @@ export class AuthService {
 
           // on stock le numéro d'identification de l'utilisateur dans le localStorage
           localStorage.setItem('userId', res.userId);
+          
           resolve();
         },
         (error) => {

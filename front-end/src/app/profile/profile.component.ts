@@ -18,15 +18,18 @@ export class ProfileComponent implements OnDestroy, OnInit {
   public image: string;
   public imageAsChanged: boolean;
   public showModal: boolean;
-  public errorMsg: string;
+  public loading: boolean;
 
   constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
+    this.loading = true;
+
     // on souscrit à la valeur du subject "User" en tant qu'observable quand on initialise la page
     this.userSubscription = this.auth.getUser().subscribe((res: User) => {
       if (res !== undefined && res !== null) {
         this.user = res;
+        this.loading = false;
         
         // on initialise les données du formulaire de sélection d'une nouvelle image de l'utilisateur
         this.profileForm = this.formBuilder.group({

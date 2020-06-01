@@ -8,7 +8,7 @@ const fs = require('fs');
 const User = db.User;
 
 // récupère les informations d'un utilisateur
-exports.getOneUser = (req, res) => {
+exports.getOneUser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
   .then(user => {
     if(!user) return res.status(404).json({ error: 'Utilisateur non trouvé !' });
@@ -18,7 +18,7 @@ exports.getOneUser = (req, res) => {
 }
 
 // modifie l'utilisateur
-exports.editUser = (req, res) => {
+exports.editUser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
   .then(user => {
     if (!user) {
@@ -48,7 +48,7 @@ exports.editUser = (req, res) => {
 }
 
 // supprime l'utilisateur
-exports.deleteUser = (req, res) => {
+exports.deleteUser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
   .then(user => {
     if (!user) {

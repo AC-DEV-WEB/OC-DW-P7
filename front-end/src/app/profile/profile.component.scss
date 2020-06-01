@@ -19,30 +19,3 @@
 .profile-select-file, .profile-email {
   font-size: 18px;
 }
-
-/* applique un flou sur l'arrière-plan au moment de l'apparition du modal */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 10;
-}
-
-/* mise en forme du modal pour la confirmation de suppression du compte utilisateur */
-.delete-modal {
-  position: fixed;
-  background-color: white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding: 40px;
-  z-index: 11;
-}
-
-/* cache le modal de la confirmation de suppression du compte utilisateur */
-.hidden {
-  display: none;
-}

@@ -27,7 +27,7 @@
 
           <div class="col-md-6 offset-md-4">
             <button class="btn btn-green" (click)="onLogin()" [disabled]="loginForm.invalid">Se connecter</button>
-            <p class="text-danger mt-2" *ngIf="errorMsg">{{ errorMsg }}</p>
+            <p *ngIf="errorMsg" class="text-danger mt-2">{{ errorMsg }}</p>
           </div>
         </form>
       </div>

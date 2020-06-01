@@ -12,9 +12,9 @@ import { User } from '../models/User.model';
 })
 export class RegisterComponent implements OnInit {
 
-  registerForm: FormGroup;
-  loading: boolean;
-  errorMsg: string;
+  public registerForm: FormGroup;
+  public loading: boolean;
+  public errorMsg: string;
 
   constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) { }
 
