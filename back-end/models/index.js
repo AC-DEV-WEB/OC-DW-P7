@@ -25,13 +25,23 @@ sequelize.authenticate().then(() => {
   console.error('Unable to connect to the database:', err);
 })
 
-const db = { };
+const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 // on importe le modèle pour les utilisateurs
 db.User = require("./User.js")(sequelize, Sequelize);
+
+// on importe le modèle pour les posts
+db.Post = require("./Post.js")(sequelize, Sequelize);
+
+// on importe le modèle pour les posts
+db.Comment = require("./Comment.js")(sequelize, Sequelize);
+
+// on connecte les posts et les commentaires en fonction de l'id des posts
+db.Post.hasMany(db.Comment, {foreignKey: 'postId', sourceKey: 'id'});
+db.Comment.belongsTo(db.Post, {foreignKey: 'postId', targetKey: 'id'});
 
 // on exporte la base de données
 module.exports = db;

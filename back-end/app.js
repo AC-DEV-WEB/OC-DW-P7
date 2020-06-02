@@ -16,6 +16,12 @@ const userRoutes = require('./routes/user');
 // déclaration de la route pour le profil utilisateur
 const profileRoutes = require('./routes/profile');
 
+// déclaration de la route pour les posts
+const postRoutes = require('./routes/post');
+
+// déclaration de la route pour les commentaires
+const commentRoutes = require('./routes/comment');
+
 // on créé l'appilcation express
 const app = express();
 
@@ -47,6 +53,12 @@ app.use('/api/auth', userRoutes);
 
 // middleware qui définit la route pour le profil utilisateur
 app.use('/api/profile', profileRoutes);
+
+// middleware qui définit la route des posts
+app.use('/api/posts', postRoutes);
+
+// middleware qui définit la route des commentaires
+app.use('/api/comment', commentRoutes);
 
 // on exporte express
 module.exports = app;

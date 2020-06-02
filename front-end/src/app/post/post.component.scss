@@ -1,0 +1,27 @@
+/* mise en forme des images sur les posts */
+.card-image {
+  width: 280px;
+  height: 240px;
+  box-shadow: 0px 6px 5px grey;
+}
+
+/* mise en forme des vidéos sur les posts */
+.card-video {
+  width: 280px;
+  height: 280px;
+}
+
+/* mise en forme du texte des posts */
+.card-text {
+  font-size: 18px;
+}
+
+/* affiche les commentaires */
+.show-comments {
+  display: block;
+}
+
+/* cache les commentaires */
+.hide-comments {
+  display: none;
+}

@@ -1,1 +1,17 @@
-<p>comment works!</p>
+<div *ngIf="user !== undefined && user !== null && comments !== undefined && comments !== null" class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title"><i>{{ comments.author }}</i></h3>
+        <!-- <div class="text-muted h7 mb-4"><i class="fa fa-clock-o"></i> il y a </div> -->
+        <p class="card-text">{{ comments.comments }}</p>
+      </div>
+      <div class="card-footer">
+        <a class="btn text-white btn-green ml-2 mt-2"><i class="fa fa-thumbs-o-up"></i> {{ comments.likes }}</a>
+        <a class="btn text-white btn-danger ml-2 mt-2"><i class="fa fa-thumbs-o-down"></i> {{ comments.dislikes }}</a>
+        <!-- si le commentaire provient du même utilisateur ou que l'utilisateur est administrateur alors on efface le commentaire avec l'id du commentaire -->
+        <a *ngIf="user.isAdmin || user.id === comments.userId" (click)="onDeleteComment()" class="btn btn-danger text-white ml-2 mt-2"><i class="fa fa-trash-o"></i></a>
+      </div>
+    </div>
+  </div>
+</div>

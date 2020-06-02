@@ -13,6 +13,7 @@ import { PostFormComponent } from './post-form/post-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { PostComponent } from './post/post.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ProfileComponent,
     CommentComponent,
     PostFormComponent,
-    HeaderComponent
+    HeaderComponent,
+    PostComponent
   ],
   imports: [
     BrowserModule,
