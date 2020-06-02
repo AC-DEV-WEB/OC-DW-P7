@@ -14,7 +14,7 @@ const postCtrl = require('../controllers/post');
 // routes de l'API pour les posts
 router.post('/create', auth, multer, postCtrl.createPost);
 router.get('/', auth, postCtrl.getAllPosts);
-router.get('/:id', auth, postCtrl.getOnePost);
+router.get('/:id/:postId', auth, postCtrl.getOnePost);
 router.put('/edit', auth, postCtrl.editPost);
 router.delete('/delete/:id/:postId', auth, postCtrl.deletePost);
 router.post('/like', auth, postCtrl.likeOnePost);

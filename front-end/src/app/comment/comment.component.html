@@ -7,8 +7,8 @@
         <p class="card-text">{{ comments.comments }}</p>
       </div>
       <div class="card-footer">
-        <a class="btn text-white btn-green ml-2 mt-2"><i class="fa fa-thumbs-o-up"></i> {{ comments.likes }}</a>
-        <a class="btn text-white btn-danger ml-2 mt-2"><i class="fa fa-thumbs-o-down"></i> {{ comments.dislikes }}</a>
+        <a (click)="onLike()" [ngClass]="{ active: !disliked, disabled: disliked }" class="btn text-white btn-green ml-2 mt-2"><i class="fa fa-thumbs-o-up"></i> {{ comments.likes }}</a>
+        <a (click)="onDislike()" [ngClass]="{ active: !liked, disabled: liked }" class="btn text-white btn-danger ml-2 mt-2"><i class="fa fa-thumbs-o-down"></i> {{ comments.dislikes }}</a>
         <!-- si le commentaire provient du même utilisateur ou que l'utilisateur est administrateur alors on efface le commentaire avec l'id du commentaire -->
         <a *ngIf="user.isAdmin || user.id === comments.userId" (click)="onDeleteComment()" class="btn btn-danger text-white ml-2 mt-2"><i class="fa fa-trash-o"></i></a>
       </div>

@@ -6,7 +6,7 @@ export class Comment {
   public likes: number;
   public dislikes: number;
   public comments: string;
-  public usersLiked: string[];
-  public usersDislked: string[];
+  public usersLiked: string;
+  public usersDisliked: string;
   public createdAt: string;
 }

@@ -203,7 +203,7 @@ exports.likeOnePost = (req, res, next) => {
     // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable    
     updateUsersDisliked = JSON.parse(post.usersDisliked);
 
-    // on vérifie si l'utilisateur a déjà noté la sauce
+    // on vérifie si l'utilisateur a déjà noté le post
     if (like === 0) {
       // on retire le like
       if (updateUsersLiked.find(user => user === userId)) {
