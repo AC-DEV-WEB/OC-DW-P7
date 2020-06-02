@@ -26,6 +26,14 @@ export class PostsService {
     );
   }
 
+  // envoie une requête au serveur pour la récupération des informations d'un post
+  //
+  // id: userID
+  // postId: postId
+  public getOnePost(id: number, postId: number): Observable<any> {
+    return this.http.get<any>('http://localhost:3000/api/posts/'+id+'/'+postId);
+  }
+
   // envoie une requête au serveur pour la création d'un nouveau post
   public createNewPost(userId: number, author: string, title: string, content: string, imageUrl?: File): Observable<any> {
     if (imageUrl) {

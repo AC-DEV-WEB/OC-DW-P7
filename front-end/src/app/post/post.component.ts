@@ -23,6 +23,7 @@ export class PostComponent implements OnInit {
   public showComment: boolean;
   public liked: boolean;
   public disliked: boolean;
+  public newPost: Post;
 
   constructor(private formBuilder: FormBuilder, private comment: CommentService, private post: PostsService, private auth: AuthService, private router: Router) { }
 
@@ -118,6 +119,22 @@ export class PostComponent implements OnInit {
     }
   }
 
+  // on récupère le post pour mettre à jours les likes/dislikes
+  onUpdateLikesPost() {    
+    this.post.getOnePost(this.user.id, this.posts.id).subscribe((res) => {
+      // on créé une nouvelle instance de Post
+      this.newPost = new Post();
+      this.newPost.likes = res.likes;
+      this.newPost.dislikes = res.dislikes;
+
+      // on met à jour la valeur des likes
+      this.posts.likes = this.newPost.likes
+
+      // on met à jour la valeur des dislikes
+      this.posts.dislikes = this.newPost.dislikes
+    });
+  }
+
   // on like le post
   onLike() {
     this.post.likePost(this.user.id, this.posts.id, !this.liked).subscribe((res: { message: string }) => {
@@ -125,8 +142,8 @@ export class PostComponent implements OnInit {
 
       this.liked = !this.liked
 
-      // on recharge les posts
-      this.post.getAllPosts();
+      // on met à jour le post
+      this.onUpdateLikesPost();
     });
   }
 
@@ -137,8 +154,8 @@ export class PostComponent implements OnInit {
 
       this.disliked = !this.disliked
 
-      // on recharge les posts
-      this.post.getAllPosts();
+      // on met à jour le post
+      this.onUpdateLikesPost();
     });
   }
 }
