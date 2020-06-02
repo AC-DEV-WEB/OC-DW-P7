@@ -21,10 +21,12 @@ export class PostComponent implements OnInit {
   public commentForm: FormGroup;
   public showModal: boolean;
   public showComment: boolean;
+  public liked: boolean;
+  public disliked: boolean;
 
   constructor(private formBuilder: FormBuilder, private comment: CommentService, private post: PostsService, private auth: AuthService, private router: Router) { }
 
-  ngOnInit() {
+  ngOnInit() {    
     // on initialise les données du formulaire pour la publication d'un nouveau commentaire
     this.commentForm = this.formBuilder.group({
       comments: ['', Validators.required]
@@ -35,6 +37,19 @@ export class PostComponent implements OnInit {
 
     // on cache les commentaires
     this.showComment = false;
+
+    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable
+    const updateUsersLiked = JSON.parse(this.posts.usersLiked);
+
+    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable
+    const updateUsersDisliked = JSON.parse(this.posts.usersDisliked);
+    
+    // on contrôle si l'utilisateur à déjà like ou dislike le post
+    if (updateUsersLiked.find(user => user === this.user.id)) {
+      this.liked = true;
+    } else if (updateUsersDisliked.find(user => user === this.user.id)) {
+      this.disliked = true;
+    }
   }
 
   // on affiche le modal
@@ -86,7 +101,8 @@ export class PostComponent implements OnInit {
   // on vérifie s'il s'agit d'une image ou d'une vidéo
   isFileImage(filename) {
     let ext = filename.split('.').pop();
-    if(ext === 'webm') {
+
+    if (ext === 'webm') {
       return true
     } else {
       return false 
@@ -100,5 +116,29 @@ export class PostComponent implements OnInit {
     } else {
       return 'commentaires'
     }
+  }
+
+  // on like le post
+  onLike() {
+    this.post.likePost(this.user.id, this.posts.id, !this.liked).subscribe((res: { message: string }) => {
+      console.log(res.message);
+
+      this.liked = !this.liked
+
+      // on recharge les posts
+      this.post.getAllPosts();
+    });
+  }
+
+  // on dislike le post
+  onDislike() {
+    this.post.dislikePost(this.user.id, this.posts.id, !this.disliked).subscribe((res: { message: string }) => {
+      console.log(res.message);
+
+      this.disliked = !this.disliked
+
+      // on recharge les posts
+      this.post.getAllPosts();
+    });
   }
 }

@@ -70,6 +70,24 @@ export class PostsService {
     return this.http.delete<any>('http://localhost:3000/api/posts/delete/'+id+'/'+postId);
   }
 
+  // envoie une requête au serveur pour le like du post
+  //
+  // id: userId
+  // postId: postId
+  // like: like 1 || 0
+  public likePost(id: number, postId: number, like: boolean): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: like ? 1 : 0 });
+  }
+
+  // envoie une requête au serveur pour le dislike du post
+  //
+  // id: userId
+  // postId: postId
+  // like: like -1 || 0
+  public dislikePost(id: number, postId: number, dislike: boolean): Observable<any> {
+    return this.http.post<any>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: dislike ? -1 : 0 });
+  }
+
   // on transforme le subject "Post" en observable
   public getPosts(): Observable<Post[]> {
     return this.postSubject.asObservable();

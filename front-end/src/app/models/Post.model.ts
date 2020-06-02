@@ -8,7 +8,7 @@ export class Post {
   public imageUrl: string;
   public likes: number;
   public dislikes: number;
-  public usersLiked: string[];
-  public usersDisliked: string[];
+  public usersLiked: string;
+  public usersDisliked: string;
   public createdAt: string;
 }

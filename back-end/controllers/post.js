@@ -185,3 +185,100 @@ exports.deletePost = (req, res, next) => {
   })
   .catch(error => res.status(500).json({ error }));
 }
+
+let updateUsersLiked = [];
+let updateUsersDisliked = [];
+
+// like/dislike d'un post
+exports.likeOnePost = (req, res, next) => {
+  const userId = req.body.userId;
+  const postId = req.body.postId;
+  const like = req.body.like;
+
+  Post.findOne({ where: { id: postId } })
+  .then((post) => {
+    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable    
+    updateUsersLiked = JSON.parse(post.usersLiked);
+
+    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable    
+    updateUsersDisliked = JSON.parse(post.usersDisliked);
+
+    // on vérifie si l'utilisateur a déjà noté la sauce
+    if (like === 0) {
+      // on retire le like
+      if (updateUsersLiked.find(user => user === userId)) {
+        // on retire l'user ID de usersLiked
+        const newArray = updateUsersLiked.filter(user => !userId);
+        
+        // on soustrait 1 au likes
+        let updateLikes = post.likes-1;
+
+        Post.update({ 
+            likes: updateLikes,
+            usersLiked: JSON.stringify(newArray)
+          },
+          { where: { id: postId } 
+        })
+
+        .then(() => res.status(201).json({ message: 'L\'utilisateur à retiré son like !' }))
+        .catch(error => res.status(400).json({ error }));
+      }
+
+      // on retire le dislike
+      if (updateUsersDisliked.find(user => user === userId)) {
+        // on retire l'user ID de usersDisliked
+        const newArray = updateUsersDisliked.filter(user => !userId);
+
+        // on soustrait 1 au dislikes
+        let updateDislikes = post.dislikes-1;
+
+        Post.update({ 
+            dislikes: updateDislikes,
+            usersDisliked: JSON.stringify(newArray)
+          },
+          { where: { id: postId } 
+        })
+
+        .then(() => res.status(201).json({ message: 'L\'utilisateur à retirer son dislike !' }))
+        .catch(error => res.status(400).json({ error }));
+      }
+    // on vérifie si l'utilisateur like le post
+    } else if (like === 1) {
+      // on ajoute l'user ID à usersLiked
+      updateUsersLiked.push(userId);
+
+      // on ajoute 1 au likes
+      let updateLikes = post.likes+1;
+
+      Post.update({ 
+          likes: updateLikes,
+          usersLiked: JSON.stringify(updateUsersLiked)
+        },
+        { where: { id: postId } 
+      })
+
+      .then(() => res.status(201).json({ message: 'L\'utilisateur à aimé le post !' }))
+      .catch(error => res.status(400).json({ error }));
+
+    // on vérifie si l'utilisateur dislike le post
+    } else if (like === -1) {      
+      // on ajoute l'user ID à usersDisliked
+      updateUsersDisliked.push(userId);
+
+      // on ajoute 1 au dislikes
+      let updateDislikes = post.dislikes+1;
+
+      Post.update({ 
+          dislikes: updateDislikes,
+          usersDisliked: JSON.stringify(updateUsersDisliked)
+        },
+        { where: { id: postId } 
+      })
+
+      .then(() => res.status(201).json({ message: 'L\'utilisateur n\'a pas aimé le post !' }))
+      .catch(error => res.status(400).json({ error }));
+    }
+  })
+
+  .catch(error => res.status(500).json({ error }));
+};
