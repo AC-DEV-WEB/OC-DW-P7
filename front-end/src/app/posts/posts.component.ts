@@ -23,7 +23,11 @@ export class PostsComponent implements OnInit {
   public isUsersDislked: boolean;
   public loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthService, private post: PostsService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private formBuilder: FormBuilder, 
+    private auth: AuthService, 
+    private post: PostsService, 
+    private router: Router, 
+    private route: ActivatedRoute) { this.post.getAllPosts() }
 
   ngOnInit() {
     this.loading = true;
@@ -47,11 +51,6 @@ export class PostsComponent implements OnInit {
     const userId = this.auth.getUserId();
     if (userId) {
       this.auth.getUserServerId(+userId);
-    }
-
-    // on récupère les informations des posts côté serveur
-    if (this.posts == undefined && this.posts == null) {
-      this.post.getAllPosts();
     }
   }
 

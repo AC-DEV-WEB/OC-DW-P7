@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Comment} from '../models/Comment.model';
+import { Comment } from '../models/Comment.model';
 import { User } from '../models/User.model';
 import { CommentService } from '../services/comment.service';
 import { PostsService } from '../services/posts.service';
@@ -17,23 +17,29 @@ export class CommentComponent implements OnInit {
 
   public liked: boolean;
   public disliked: boolean;
-  public newComment: Comment;
+  public likeCount: number = 0;
+  public dislikeCount: number = 0;
 
   constructor(private comment: CommentService, private post: PostsService) { }
 
   ngOnInit() {
-    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable
-    const updateUsersLiked = JSON.parse(this.comments.usersLiked);
-
-    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable
-    const updateUsersDisliked = JSON.parse(this.comments.usersDisliked);
-    
-    // on contrôle si l'utilisateur à déjà like ou dislike le commentaire
-    if (updateUsersLiked.find(user => user === this.user.id)) {
-      this.liked = true;
-    } else if (updateUsersDisliked.find(user => user === this.user.id)) {
-      this.disliked = true;
-    }
+    // on récupère les likes et dislikes du commentaire
+    this.comment.getOneComment(this.user.id, this.comments.id).subscribe((res: Comment) => {
+      // on compte le nombre de likes/dislikes par utilisateur pour chaque like ou dislike dans le tableau Comments_Likes
+      res.Comments_Likes.forEach(like => {
+        if (like.likes === 1) {
+          this.likeCount += 1;
+          if (like.userId === this.user.id) {
+            this.liked = true;
+          }
+        } else if (like.dislikes === 1) {
+          this.dislikeCount += 1;
+          if (like.userId === this.user.id) {
+            this.disliked = true;
+          }
+        }
+      })
+    });
   }
 
   // on supprime le commentaire
@@ -46,22 +52,6 @@ export class CommentComponent implements OnInit {
     });
   }
 
-  // on récupère le commentaire pour mettre à jours les likes/dislikes
-  onUpdateLikesComment() {    
-    this.comment.getOneComment(this.user.id, this.comments.id).subscribe((res) => {
-      // on créé une nouvelle instance de Comment
-      this.newComment = new Comment();
-      this.newComment.likes = res.likes;
-      this.newComment.dislikes = res.dislikes;
-
-      // on met à jour la valeur des likes
-      this.comments.likes = this.newComment.likes
-
-      // on met à jour la valeur des dislikes
-      this.comments.dislikes = this.newComment.dislikes
-    });
-  }
-
   // on like le commentaire
   onLike() {
     this.comment.likeComment(this.user.id, this.comments.id, !this.liked).subscribe((res: { message: string }) => {
@@ -70,7 +60,11 @@ export class CommentComponent implements OnInit {
       this.liked = !this.liked
 
       // on met à jour le commentaire
-      this.onUpdateLikesComment();
+      if (this.liked) {
+        this.likeCount++;
+      } else {
+        this.likeCount--;
+      }
     });
   }
 
@@ -82,7 +76,11 @@ export class CommentComponent implements OnInit {
       this.disliked = !this.disliked
 
       // on met à jour le commentaire
-      this.onUpdateLikesComment();
+      if (this.disliked) {
+        this.dislikeCount++;
+      } else {
+        this.dislikeCount--;
+      }
     });
   }
 }

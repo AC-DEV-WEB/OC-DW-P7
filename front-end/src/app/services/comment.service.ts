@@ -24,6 +24,11 @@ export class CommentService {
     return this.http.post<any>('http://localhost:3000/api/comment/create/', { comment: newComment });
   }
 
+  // envoie une requête au serveur pour la récupération des informations de tous les commentaires
+  public getAllComments(): Observable<any> {
+    return this.http.get<any>('http://localhost:3000/api/comment/');
+  }
+
   // envoie une requête au serveur pour la récupération des informations d'un commentaire
   //
   // id: userID

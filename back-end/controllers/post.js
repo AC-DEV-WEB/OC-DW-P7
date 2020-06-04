@@ -16,6 +16,9 @@ const Post = db.Post;
 // on initialise la base de données des commentaires
 const Comment = db.Comment;
 
+// on initialise la base de données des likes des posts
+const PostLikes = db.PostLikes;
+
 // création d'un post
 exports.createPost = (req, res, next) => {
   // on traîte les données du coprs de la requête en objet JavaScript utilisable 
@@ -53,11 +56,11 @@ exports.getAllPosts = (req, res, next) => {
   // on tri les posts par ordre décroissant et on recupère les commentaires pour insérer dans la réponse
   Post.findAll({ 
     order: Sequelize.literal('createdAt DESC'),
-    include: [{
-      model: Comment
-    }]
+    include: [
+      { model: Comment },
+      { model: PostLikes }
+    ]
   })
-
   .then(posts => {
     if(posts.length < 0) return res.status(404).json({ error: "Aucun posts trouvés !"});
 
@@ -71,9 +74,10 @@ exports.getOnePost = (req, res, next) => {
   // on recupère les commentaires pour insérer dans la réponse
   Post.findOne({ 
     where: { id: req.params.postId },
-    include: [{
-      model: Comment
-    }]
+    include: [
+      { model: Comment },
+      { model: PostLikes }
+    ]
   })
   .then(post => {
     if(!post) return res.status(404).json({ error: 'Post non trouvé !' });
@@ -186,9 +190,6 @@ exports.deletePost = (req, res, next) => {
   .catch(error => res.status(500).json({ error }));
 }
 
-let updateUsersLiked = [];
-let updateUsersDisliked = [];
-
 // like/dislike d'un post
 exports.likeOnePost = (req, res, next) => {
   const userId = req.body.userId;
@@ -197,85 +198,40 @@ exports.likeOnePost = (req, res, next) => {
 
   Post.findOne({ where: { id: postId } })
   .then((post) => {
-    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable    
-    updateUsersLiked = JSON.parse(post.usersLiked);
-
-    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable    
-    updateUsersDisliked = JSON.parse(post.usersDisliked);
-
     // on vérifie si l'utilisateur a déjà noté le post
     if (like === 0) {
-      // on retire le like
-      if (updateUsersLiked.find(user => user === userId)) {
-        // on retire l'user ID de usersLiked
-        const newArray = updateUsersLiked.filter(user => !userId);
-        
-        // on soustrait 1 au likes
-        let updateLikes = post.likes-1;
-
-        Post.update({ 
-            likes: updateLikes,
-            usersLiked: JSON.stringify(newArray)
-          },
-          { where: { id: postId } 
-        })
-
-        .then(() => res.status(201).json({ message: 'L\'utilisateur à retiré son like !' }))
-        .catch(error => res.status(400).json({ error }));
-      }
-
-      // on retire le dislike
-      if (updateUsersDisliked.find(user => user === userId)) {
-        // on retire l'user ID de usersDisliked
-        const newArray = updateUsersDisliked.filter(user => !userId);
-
-        // on soustrait 1 au dislikes
-        let updateDislikes = post.dislikes-1;
-
-        Post.update({ 
-            dislikes: updateDislikes,
-            usersDisliked: JSON.stringify(newArray)
-          },
-          { where: { id: postId } 
-        })
-
-        .then(() => res.status(201).json({ message: 'L\'utilisateur à retirer son dislike !' }))
-        .catch(error => res.status(400).json({ error }));
-      }
+      PostLikes.findOne({ where: { postId: postId, userId: userId } })
+      .then(postLikes => {
+       
+        // on supprime le like/dislike
+        if (postLikes.userId === userId) {
+          PostLikes.destroy({ where: { postId: postId, userId: userId } })
+          .then(() => res.status(201).json({ message: 'L\'utilisateur à retiré son like/dislike !' }))
+          .catch(error => res.status(400).json({ error }));
+        }
+      })
     // on vérifie si l'utilisateur like le post
     } else if (like === 1) {
-      // on ajoute l'user ID à usersLiked
-      updateUsersLiked.push(userId);
-
-      // on ajoute 1 au likes
-      let updateLikes = post.likes+1;
-
-      Post.update({ 
-          likes: updateLikes,
-          usersLiked: JSON.stringify(updateUsersLiked)
-        },
-        { where: { id: postId } 
+      // on créé le like
+      PostLikes.create({ userId: userId, likes: 1, postId: postId })
+      .then(() => {
+        PostLikes.findOne({ where: { postId: postId, userId: userId } })
+        .then(postLikes => {
+          res.status(201).json({ message: 'L\'utilisateur à aimé le post !' })
+        })
       })
-
-      .then(() => res.status(201).json({ message: 'L\'utilisateur à aimé le post !' }))
       .catch(error => res.status(400).json({ error }));
 
     // on vérifie si l'utilisateur dislike le post
-    } else if (like === -1) {      
-      // on ajoute l'user ID à usersDisliked
-      updateUsersDisliked.push(userId);
-
-      // on ajoute 1 au dislikes
-      let updateDislikes = post.dislikes+1;
-
-      Post.update({ 
-          dislikes: updateDislikes,
-          usersDisliked: JSON.stringify(updateUsersDisliked)
-        },
-        { where: { id: postId } 
+    } else if (like === -1) {
+      // on créé le dislike
+      PostLikes.create({ userId: userId, dislikes: 1, postId: postId })
+      .then(() => {
+        PostLikes.findOne({ where: { postId: postId, userId: userId } })
+        .then(postLikes => {
+          res.status(201).json({ message: 'L\'utilisateur n\'a pas aimé le post !' })
+        })
       })
-
-      .then(() => res.status(201).json({ message: 'L\'utilisateur n\'a pas aimé le post !' }))
       .catch(error => res.status(400).json({ error }));
     }
   })

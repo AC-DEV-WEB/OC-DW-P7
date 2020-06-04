@@ -1,11 +1,17 @@
 // on importe les modèles de données
 const db = require("../models");
 
+// package Sequelize
+const Sequelize = require("sequelize");
+
 // on initialise la base de données des utilisateurs
 const User = db.User;
 
 // on initialise la base de données des commentaires
 const Comment = db.Comment;
+
+// on initialise la base de données des likes des commentaires
+const CommentLikes = db.CommentLikes;
 
 // création d'un commentaire
 exports.createComment = (req, res, next) => {
@@ -17,7 +23,12 @@ exports.createComment = (req, res, next) => {
 
 // récupère tous les commentaires
 exports.getAllComments = (req, res, next) => {
-  Comment.findAll()
+  Comment.findAll({ 
+    order: Sequelize.literal('createdAt DESC'),
+    include: [
+      { model: CommentLikes }
+    ]
+  })
   .then(comments => {
     if(comments.length < 0) return res.status(404).json({ error: "Aucun commentaires trouvés !"});
 
@@ -30,7 +41,12 @@ exports.getAllComments = (req, res, next) => {
 // récupère les informations d'un commentaire
 exports.getOneComment = (req, res, next) => {
   // on vérife que le commentaire exsite
-  Comment.findOne({ where: { id: req.params.commentId } })
+  Comment.findOne({ 
+    where: { id: req.params.commentId },
+    include: [
+      { model: CommentLikes }
+    ]
+  })
   .then(comment => {
     if(!comment) return res.status(404).json({ error: 'Commentaire non trouvé !' });
 
@@ -85,9 +101,6 @@ exports.deleteComment = (req, res, next) => {
   .catch(error => res.status(500).json({ error })); 
 }
 
-let updateUsersLiked = [];
-let updateUsersDisliked = [];
-
 // like/dislike d'un commentaire
 exports.likeOneComment = (req, res, next) => {
   const userId = req.body.userId;
@@ -96,85 +109,40 @@ exports.likeOneComment = (req, res, next) => {
 
   Comment.findOne({ where: { id: commentId } })
   .then((comment) => {
-    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable    
-    updateUsersLiked = JSON.parse(comment.usersLiked);
-
-    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable    
-    updateUsersDisliked = JSON.parse(comment.usersDisliked);
-
     // on vérifie si l'utilisateur a déjà noté le commentaire
     if (like === 0) {
-      // on retire le like
-      if (updateUsersLiked.find(user => user === userId)) {
-        // on retire l'user ID de usersLiked
-        const newArray = updateUsersLiked.filter(user => !userId);
-        
-        // on soustrait 1 au likes
-        let updateLikes = comment.likes-1;
-
-        Comment.update({ 
-            likes: updateLikes,
-            usersLiked: JSON.stringify(newArray)
-          },
-          { where: { id: commentId } 
-        })
-
-        .then(() => res.status(201).json({ message: 'L\'utilisateur à retiré son like !' }))
-        .catch(error => res.status(400).json({ error }));
-      }
-
-      // on retire le dislike
-      if (updateUsersDisliked.find(user => user === userId)) {
-        // on retire l'user ID de usersDisliked
-        const newArray = updateUsersDisliked.filter(user => !userId);
-
-        // on soustrait 1 au dislikes
-        let updateDislikes = comment.dislikes-1;
-
-        Comment.update({ 
-            dislikes: updateDislikes,
-            usersDisliked: JSON.stringify(newArray)
-          },
-          { where: { id: commentId } 
-        })
-
-        .then(() => res.status(201).json({ message: 'L\'utilisateur à retirer son dislike !' }))
-        .catch(error => res.status(400).json({ error }));
-      }
+      CommentLikes.findOne({ where: { commentId: commentId, userId: userId } })
+      .then(commentLikes => {
+       
+        // on supprime le like/dislike
+        if (commentLikes.userId === userId) {
+          CommentLikes.destroy({ where: { commentId: commentId, userId: userId } })
+          .then(() => res.status(201).json({ message: 'L\'utilisateur à retiré son like/dislike !' }))
+          .catch(error => res.status(400).json({ error }));
+        }
+      })
     // on vérifie si l'utilisateur like le commentaire
     } else if (like === 1) {
-      // on ajoute l'user ID à usersLiked
-      updateUsersLiked.push(userId);
-
-      // on ajoute 1 au likes
-      let updateLikes = comment.likes+1;
-
-      Comment.update({ 
-          likes: updateLikes,
-          usersLiked: JSON.stringify(updateUsersLiked)
-        },
-        { where: { id: commentId } 
+      // on créé le like
+      CommentLikes.create({ userId: userId, likes: 1, commentId: commentId })
+      .then(() => {
+        CommentLikes.findOne({ where: { commentId: commentId, userId: userId } })
+        .then(commentLikes => {
+          res.status(201).json({ message: 'L\'utilisateur à aimé le commentaire !' })
+        })
       })
-
-      .then(() => res.status(201).json({ message: 'L\'utilisateur à aimé le commentaire !' }))
       .catch(error => res.status(400).json({ error }));
 
     // on vérifie si l'utilisateur dislike le commentaire
-    } else if (like === -1) {      
-      // on ajoute l'user ID à usersDisliked
-      updateUsersDisliked.push(userId);
-
-      // on ajoute 1 au dislikes
-      let updateDislikes = comment.dislikes+1;
-
-      Comment.update({ 
-          dislikes: updateDislikes,
-          usersDisliked: JSON.stringify(updateUsersDisliked)
-        },
-        { where: { id: commentId } 
+    } else if (like === -1) {
+      // on créé le dislike
+      CommentLikes.create({ userId: userId, dislikes: 1, commentId: commentId })
+      .then(() => {
+        CommentLikes.findOne({ where: { commentId: commentId, userId: userId } })
+        .then(commentLikes => {
+          res.status(201).json({ message: 'L\'utilisateur n\'a pas aimé le commentaire !' })
+        })
       })
-
-      .then(() => res.status(201).json({ message: 'L\'utilisateur n\'a pas aimé le commentaire !' }))
       .catch(error => res.status(400).json({ error }));
     }
   })

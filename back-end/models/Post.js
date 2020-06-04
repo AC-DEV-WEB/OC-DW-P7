@@ -19,26 +19,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     imageUrl: {
       type: Sequelize.STRING
-    },
-    likes: {
-      type: Sequelize.INTEGER,
-      defaultValue: '0',
-      allowNull: false
-    },
-    dislikes: {
-      type: Sequelize.INTEGER,
-      defaultValue: '0',
-      allowNull: false
-    },
-    usersLiked: {
-      type: Sequelize.STRING,
-      defaultValue: '[]',
-      allowNull: false
-    },
-    usersDisliked: {
-      type: Sequelize.STRING,
-      defaultValue: '[]',
-      allowNull: false
     }
   });
 

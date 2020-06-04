@@ -24,8 +24,8 @@
       </div>
       <div class="card-footer">
         <!-- on active ou désactive le like/dislike -->
-        <a (click)="onLike()" [ngClass]="{ active: !disliked, disabled: disliked }" class="btn text-white btn-green ml-2 mt-2"><i class="fa fa-thumbs-o-up"></i> {{ posts.likes }}</a>
-        <a (click)="onDislike()" [ngClass]="{ active: !liked, disabled: liked }" class="btn text-white btn-danger ml-2 mt-2"><i class="fa fa-thumbs-o-down"></i> {{ posts.dislikes }}</a>
+        <a (click)="onLike()" [ngClass]="{ active: !liked, disabled: disliked }" class="btn text-white btn-green ml-2 mt-2"><i class="fa fa-thumbs-o-up"></i> {{ likeCount }}</a>
+        <a (click)="onDislike()" [ngClass]="{ active: !disliked, disabled: liked }" class="btn text-white btn-danger ml-2 mt-2"><i class="fa fa-thumbs-o-down"></i> {{ dislikeCount }}</a>
         <a (click)="onShowModal()" class="btn btn-blue text-white ml-2 mt-2"><i class="fa fa-plus"></i></a>
         <a (click)="onShowComment()" class="btn btn-blue text-white ml-2 mt-2"><i class="fa fa-comment-o"></i> {{ posts.Comments.length }} {{ isManyComment() }}</a>
         <!-- si le post provient du même utilisateur ou quel l'utilisateur est administrateur alors on efface le post avec l'id du post -->

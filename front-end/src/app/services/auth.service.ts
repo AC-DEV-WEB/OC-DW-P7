@@ -88,6 +88,9 @@ export class AuthService {
     // on efface le localStorage
     localStorage.clear();
 
+    // on recharge la page pour effacer les données d'une session précédente
+    window.location.reload();
+
     // redirige l'utilisateur vers la page de connexion
     this.router.navigate(['/login']);
   }

@@ -6,9 +6,14 @@ export class Post {
   public content: string;
   public Comments: Comment[];
   public imageUrl: string;
+  public Posts_Likes: PostLikes[];
+  public createdAt: string;
+}
+
+export class PostLikes {
+  public id: number;
+  public userId: number;
   public likes: number;
   public dislikes: number;
-  public usersLiked: string;
-  public usersDisliked: string;
-  public createdAt: string;
+  public postId: number;
 }

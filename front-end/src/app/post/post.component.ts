@@ -23,11 +23,12 @@ export class PostComponent implements OnInit {
   public showComment: boolean;
   public liked: boolean;
   public disliked: boolean;
-  public newPost: Post;
+  public likeCount: number = 0;
+  public dislikeCount: number = 0;
 
   constructor(private formBuilder: FormBuilder, private comment: CommentService, private post: PostsService, private auth: AuthService, private router: Router) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     // on initialise les données du formulaire pour la publication d'un nouveau commentaire
     this.commentForm = this.formBuilder.group({
       comments: ['', Validators.required]
@@ -38,19 +39,21 @@ export class PostComponent implements OnInit {
 
     // on cache les commentaires
     this.showComment = false;
-
-    // on traîte les données de la valeur usersLiked en objet JavaScript utilisable
-    const updateUsersLiked = JSON.parse(this.posts.usersLiked);
-
-    // on traîte les données de la valeur usersDisliked en objet JavaScript utilisable
-    const updateUsersDisliked = JSON.parse(this.posts.usersDisliked);
     
-    // on contrôle si l'utilisateur à déjà like ou dislike le post
-    if (updateUsersLiked.find(user => user === this.user.id)) {
-      this.liked = true;
-    } else if (updateUsersDisliked.find(user => user === this.user.id)) {
-      this.disliked = true;
-    }
+    // on compte le nombre de likes/dislikes par utilisateur pour chaque like ou dislike dans le tableau Posts_Likes
+    this.posts.Posts_Likes.forEach(like => {
+      if (like.likes === 1) {
+        this.likeCount += 1;
+        if (like.userId === this.user.id) {
+          this.liked = true;
+        }
+      } else if (like.dislikes === 1) {
+        this.dislikeCount += 1;
+        if (like.userId === this.user.id) {
+          this.disliked = true;
+        }
+      }
+    })
   }
 
   // on affiche le modal
@@ -119,22 +122,6 @@ export class PostComponent implements OnInit {
     }
   }
 
-  // on récupère le post pour mettre à jours les likes/dislikes
-  onUpdateLikesPost() {    
-    this.post.getOnePost(this.user.id, this.posts.id).subscribe((res) => {
-      // on créé une nouvelle instance de Post
-      this.newPost = new Post();
-      this.newPost.likes = res.likes;
-      this.newPost.dislikes = res.dislikes;
-
-      // on met à jour la valeur des likes
-      this.posts.likes = this.newPost.likes
-
-      // on met à jour la valeur des dislikes
-      this.posts.dislikes = this.newPost.dislikes
-    });
-  }
-
   // on like le post
   onLike() {
     this.post.likePost(this.user.id, this.posts.id, !this.liked).subscribe((res: { message: string }) => {
@@ -143,7 +130,11 @@ export class PostComponent implements OnInit {
       this.liked = !this.liked
 
       // on met à jour le post
-      this.onUpdateLikesPost();
+      if (this.liked) {
+        this.likeCount++;
+      } else {
+        this.likeCount--;
+      }
     });
   }
 
@@ -151,11 +142,15 @@ export class PostComponent implements OnInit {
   onDislike() {
     this.post.dislikePost(this.user.id, this.posts.id, !this.disliked).subscribe((res: { message: string }) => {
       console.log(res.message);
-
+      
       this.disliked = !this.disliked
 
       // on met à jour le post
-      this.onUpdateLikesPost();
+      if (this.disliked) {
+        this.dislikeCount++;
+      } else {
+        this.dislikeCount--;
+      }
     });
   }
 }

@@ -36,12 +36,26 @@ db.User = require("./User.js")(sequelize, Sequelize);
 // on importe le modèle pour les posts
 db.Post = require("./Post.js")(sequelize, Sequelize);
 
+// on importe le modèle pour les likes des posts
+db.PostLikes = require("./PostLikes.js")(sequelize, Sequelize);
+
 // on importe le modèle pour les posts
 db.Comment = require("./Comment.js")(sequelize, Sequelize);
+
+// on importe le modèle pour les likes des commentaires
+db.CommentLikes = require("./CommentLikes.js")(sequelize, Sequelize);
 
 // on connecte les posts et les commentaires en fonction de l'id des posts
 db.Post.hasMany(db.Comment, {foreignKey: 'postId', sourceKey: 'id'});
 db.Comment.belongsTo(db.Post, {foreignKey: 'postId', targetKey: 'id'});
+
+// on connecte les posts et les likes en fonction de l'id des posts
+db.Post.hasMany(db.PostLikes, {foreignKey: 'postId', sourceKey: 'id'});
+db.PostLikes.belongsTo(db.Post, {foreignKey: 'postId', targetKey: 'id'});
+
+// on connecte les commentaires et les likes en fonction de l'id des commentaires
+db.Comment.hasMany(db.CommentLikes, {foreignKey: 'commentId', sourceKey: 'id'});
+db.CommentLikes.belongsTo(db.Comment, {foreignKey: 'commentId', targetKey: 'id'});
 
 // on exporte la base de données
 module.exports = db;
