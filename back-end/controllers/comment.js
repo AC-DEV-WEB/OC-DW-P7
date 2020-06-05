@@ -91,7 +91,11 @@ exports.deleteComment = (req, res, next) => {
         if(!user.isAdmin) return res.status(401).json({ error: 'Accès non autorisé !' });
       }
     })
-    .catch(error => res.status(500).json({ error })); 
+    .catch(error => res.status(500).json({ error }));
+
+    // on efface les likes/dislikes du commentaire
+    CommentLikes.destroy({ where: { commentId: req.params.commentId }})
+    .catch(error => res.status(400).json({ error }));
 
     // on efface le commentaire
     Comment.destroy({ where: { id: req.params.commentId } })

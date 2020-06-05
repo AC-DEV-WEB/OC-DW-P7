@@ -19,6 +19,9 @@ const Comment = db.Comment;
 // on initialise la base de données des likes des posts
 const PostLikes = db.PostLikes;
 
+// on initialise la base de données des likes des commentaires
+const CommentLikes = db.CommentLikes;
+
 // création d'un post
 exports.createPost = (req, res, next) => {
   // on traîte les données du coprs de la requête en objet JavaScript utilisable 
@@ -160,29 +163,45 @@ exports.deletePost = (req, res, next) => {
         });
       }
 
-      // on recherche tous les commentaires
-      Comment.findAll({ where: { postId: req.params.postId } })
-      .then(comments => {
-        
-        // on vérifie si le post contient des commentaires
+      // on recherche les likes/dislikes du post
+      PostLikes.findOne({ where: { postId: req.params.postId } })
+      .then(postLikes => {
+        if (postLikes) {
+          // on efface les likes/dislikes du post
+          PostLikes.destroy({ where: { postId: req.params.postId } })
+          .catch(error => res.status(400).json({ error }));
+        }
+      })
+
+      // on recherche tous les commentaires en incluant les likes/dislikes des commentaires
+      Comment.findAll({ where: { postId: req.params.postId },
+        include: [
+          { model: CommentLikes }
+        ]
+      })
+      .then(comments => {        
+        // le post ne contient pas de commentaires
         if(comments.length === 0) {         
-          // on efface le post s'il n'a pas de commentaires
+          // on efface le post
           Post.destroy({ where: { id: req.params.postId} })
           .then(() => res.status(200).json({ message: 'Post supprimé !' }))
           .catch(error => res.status(400).json({ error }));
+        // le post contient des commentaires
         } else {
-          // on recherche les commentaires lié au post
+          // on efface les likes/dislikes des commentaires
           comments.map(comment => {
-            // on efface les commentaires du post
-            Comment.destroy({ where: { postId: comment.postId }})
-            .then(() => { 
-              // on efface le post
-              Post.destroy({ where: { id: req.params.postId } })
-              .then(() => res.status(200).json({ message: 'Post supprimé !' }))
-              .catch(error => res.status(400).json({ error }));
+            comment.Comments_Likes.map(likes => {
+              CommentLikes.destroy({ where: { commentId: likes.commentId }})
             })
-            .catch(error => res.status(400).json({ error }));
           })
+
+          // on efface les commentaires
+          Comment.destroy({where: { postId: comments.map(comment => { return comment.postId }) }})
+
+          // on efface le post
+          Post.destroy({ where: { id: req.params.postId } })
+          .then(() => res.status(200).json({ message: 'Post supprimé !' }))
+          .catch(error => res.status(400).json({ error }));
         }
       })
       .catch(error => res.status(400).json({ error }));
