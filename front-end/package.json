@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --watch --open=true",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
+  "author": "AC-DEV-WEB",
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@angular/animations": "^9.1.9",

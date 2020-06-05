@@ -1,0 +1,19 @@
+{
+  "name": "dev",
+  "version": "1.0.0",
+  "description": "Créez un réseau social d’entreprise",
+  "main": "index.js",
+  "scripts": {
+    "front-end": "cd front-end && npm install",
+    "back-end": "cd back-end && npm install",
+    "client": "cd front-end && npm start",
+    "server": "cd back-end && npm start",
+    "install": "concurrently \"npm run front-end\" \"npm run back-end\"",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "AC-DEV-WEB",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^5.2.0"
+  }
+}
