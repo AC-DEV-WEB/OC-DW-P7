@@ -24,22 +24,24 @@ export class CommentComponent implements OnInit {
 
   ngOnInit() {
     // on récupère les likes et dislikes du commentaire
-    this.comment.getOneComment(this.user.id, this.comments.id).subscribe((res: Comment) => {
-      // on compte le nombre de likes/dislikes par utilisateur pour chaque like ou dislike dans le tableau Comments_Likes
-      res.Comments_Likes.forEach(like => {
-        if (like.likes === 1) {
-          this.likeCount += 1;
-          if (like.userId === this.user.id) {
-            this.liked = true;
+    if (this.comments.Comments_Likes === undefined || this.comments.Comments_Likes === null) {
+      this.comment.getOneComment(this.user.id, this.comments.id).subscribe((res: Comment) => {
+        // on compte le nombre de likes/dislikes par utilisateur pour chaque like ou dislike dans le tableau Comments_Likes
+        res.Comments_Likes.forEach(like => {
+          if (like.likes === 1) {
+            this.likeCount += 1;
+            if (like.userId === this.user.id) {
+              this.liked = true;
+            }
+          } else if (like.dislikes === 1) {
+            this.dislikeCount += 1;
+            if (like.userId === this.user.id) {
+              this.disliked = true;
+            }
           }
-        } else if (like.dislikes === 1) {
-          this.dislikeCount += 1;
-          if (like.userId === this.user.id) {
-            this.disliked = true;
-          }
-        }
-      })
-    });
+        })
+      });
+    }
   }
 
   // on supprime le commentaire

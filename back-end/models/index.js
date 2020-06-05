@@ -57,5 +57,9 @@ db.PostLikes.belongsTo(db.Post, {foreignKey: 'postId', targetKey: 'id'});
 db.Comment.hasMany(db.CommentLikes, {foreignKey: 'commentId', sourceKey: 'id'});
 db.CommentLikes.belongsTo(db.Comment, {foreignKey: 'commentId', targetKey: 'id'});
 
+// on connecte l'utilisateur aux posts en fonction de l'id de l'utilisateur
+db.User.hasOne(db.Post, {foreignKey: 'userId', sourceKey: 'id'});
+db.Post.belongsTo(db.User, {foreignKey: 'userId', targetKey: 'id'});
+
 // on exporte la base de données
 module.exports = db;

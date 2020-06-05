@@ -58,7 +58,8 @@ exports.getAllPosts = (req, res, next) => {
     order: Sequelize.literal('createdAt DESC'),
     include: [
       { model: Comment },
-      { model: PostLikes }
+      { model: PostLikes },
+      { model: User }
     ]
   })
   .then(posts => {
@@ -76,7 +77,8 @@ exports.getOnePost = (req, res, next) => {
     where: { id: req.params.postId },
     include: [
       { model: Comment },
-      { model: PostLikes }
+      { model: PostLikes },
+      { model: User }
     ]
   })
   .then(post => {
