@@ -25,6 +25,7 @@ export class PostComponent implements OnInit {
   public disliked: boolean;
   public likeCount: number = 0;
   public dislikeCount: number = 0;
+   lastdate = new Date();
 
   constructor(private formBuilder: FormBuilder, private comment: CommentService, private post: PostsService, private auth: AuthService, private router: Router) { }
 

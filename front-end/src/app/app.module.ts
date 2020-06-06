@@ -14,6 +14,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './header/header.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { PostComponent } from './post/post.component';
+import { DateAgoPipe } from './pipes/date-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PostComponent } from './post/post.component';
     CommentComponent,
     PostFormComponent,
     HeaderComponent,
-    PostComponent
+    PostComponent,
+    DateAgoPipe
   ],
   imports: [
     BrowserModule,
