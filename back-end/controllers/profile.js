@@ -32,11 +32,13 @@ exports.editUser = (req, res, next) => {
       // on récupère le nom du fichier image depuis la base données
       const filename = user.imageUrl.split('/images/')[1];
 
-      if (filename !== 'blank-profile.png') {
+      if (filename && filename !== 'blank-profile.png') {
         // on supprime l'ancienne image
         fs.unlink(`images/${filename}`, function (error) {
           if (error) throw error;
         });
+      } else {
+        return res.status(500).json({ error });
       }
 
       User.update({ imageUrl: imageUrl }, { where: { id : req.params.id } })
@@ -58,12 +60,16 @@ exports.deleteUser = (req, res, next) => {
     // on récupère le nom du fichier image depuis la base données
     const filename = user.imageUrl.split('/images/')[1];
 
-    // on supprime l'image de l'utilisateur
-    if (filename !== 'blank-profile.png') {
-      // on supprime l'ancienne image
-      fs.unlink(`images/${filename}`, function (error) {
-        if (error) throw error;
-      });
+    if (filename) {
+      // on supprime l'image de l'utilisateur
+      if (filename !== 'blank-profile.png') {
+        // on supprime l'ancienne image
+        fs.unlink(`images/${filename}`, function (error) {
+          if (error) throw error;
+        });
+      } else {
+        return res.status(500).json({ error });
+      }
     }
 
     User.destroy({ where: { id: req.params.id } })

@@ -102,13 +102,17 @@ exports.editPost = (req, res, next) => {
     // on vérife que le post exsite
     Post.findOne({ where: { id: postObject.id } })
     .then(post => {
-        // on récupère le nom du fichier image
-        const filename = post.imageUrl.split('/images/')[1];
-        
+      // on récupère le nom du fichier image
+      const filename = post.imageUrl.split('/images/')[1];
+
+      if (filename) {
         // on supprime l'ancienne image
         fs.unlink(`images/${filename}`, function (error) {
           if (error) throw error;
         });
+      } else {
+        return res.status(500).json({ error });
+      }
     })
     .catch(error => res.status(500).json({ error }));
 
@@ -157,10 +161,14 @@ exports.deletePost = (req, res, next) => {
         // on récupère le nom du fichier image depuis la base données
         const filename = post.imageUrl.split('/images/')[1];
 
-        // on supprime l'image
-        fs.unlink(`images/${filename}`, function (error) {
-          if (error) throw error;
-        });
+        if (filename) {
+          // on supprime l'image
+          fs.unlink(`images/${filename}`, function (error) {
+            if (error) throw error;
+          });
+        } else {
+          return res.status(500).json({ error });
+        }
       }
 
       // on recherche les likes/dislikes du post
