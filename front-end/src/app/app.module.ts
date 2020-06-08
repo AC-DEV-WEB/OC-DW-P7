@@ -4,16 +4,16 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
-import { PostsComponent } from './posts/posts.component';
-import { ProfileComponent } from './profile/profile.component';
-import { CommentComponent } from './comment/comment.component';
-import { PostFormComponent } from './post-form/post-form.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { PostsComponent } from './components/posts/posts.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { CommentComponent } from './components/comment/comment.component';
+import { PostFormComponent } from './components/post-form/post-form.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from './components/header/header.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { PostComponent } from './post/post.component';
+import { PostComponent } from './components/post/post.component';
 import { DateAgoPipe } from './pipes/date-ago.pipe';
 
 @NgModule({

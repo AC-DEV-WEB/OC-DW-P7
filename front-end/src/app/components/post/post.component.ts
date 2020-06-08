@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Post } from '../models/Post.model';
-import { User } from '../models/User.model';
+import { Post } from '../../models/Post.model';
+import { User } from '../../models/User.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommentService } from '../services/comment.service';
-import { PostsService } from '../services/posts.service';
+import { CommentService } from '../../services/comment.service';
+import { PostsService } from '../../services/posts.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-post',

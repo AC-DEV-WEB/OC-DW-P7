@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
-import { PostsService } from '../services/posts.service';
+import { AuthService } from '../../services/auth.service';
+import { PostsService } from '../../services/posts.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { User } from '../models/User.model';
-import { Post } from '../models/Post.model';
+import { User } from '../../models/User.model';
+import { Post } from '../../models/Post.model';
 
 @Component({
   selector: 'app-posts',

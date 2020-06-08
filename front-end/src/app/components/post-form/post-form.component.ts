@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
-import { PostsService } from '../services/posts.service';
+import { AuthService } from '../../services/auth.service';
+import { PostsService } from '../../services/posts.service';
 import { Router } from '@angular/router';
-import { User } from '../models/User.model';
+import { User } from '../../models/User.model';
 import { Subscription } from 'rxjs';
 
 @Component({
