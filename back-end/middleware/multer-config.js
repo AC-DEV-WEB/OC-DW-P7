@@ -21,11 +21,14 @@ const storage = multer.diskStorage({
     // on supprime les espaces contenue dans le nom des fichiers
     const name = file.originalname.split(' ').join('_');
 
+    // on retire le nom de l'extension pour renommer plus tard
+    const removeExtension = name.split('.')[0]
+
     // on applique l'extension au fichier
     const extension = MIME_TYPES[file.mimetype];
     
     // on génère un nom de fichier avec la suppression des espaces + la date du jour et l'extension du fichier
-    callback(null, name + Date.now() + '.' + extension);
+    callback(null, removeExtension + Date.now() + '.' + extension);
   }
 });
 
