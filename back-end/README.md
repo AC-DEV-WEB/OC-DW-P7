@@ -1,11 +1,29 @@
 # Serveur de développement
 
-### Pré-requis ###
+Pré-requis
+============
 
-Vous devrez avoir Node et `npm` installés localement sur votre machine.
+Ce projet a été réalisé avec :
+---------------------------
+- `Express v4.17.1`
+- `Node.js v12.16.0`
 
-### Installation ###
+Node.js v12.16.0
+---------------------------
+https://nodejs.org/dist/v12.6.0/
 
-Clonez ce dépôt. Depuis le dossier back-end, exécutez `npm install`. 
-Exécutez ensuite le serveur avec `node serve`.
-Le serveur doit fonctionner sur `localhost` avec le port par défaut `3000`.
+
+Configuration
+============
+Configuration de la connexion à la base de données MySQL :
+```
+back-end/config/db.config.js
+```
+
+Installation
+============
+
+Clonez ce dépôt.<br>
+Depuis le dossier back-end, exécutez `npm install`.<br>
+Exécutez ensuite le serveur avec `nodemon serve`.<br>
+Le serveur doit fonctionner sur `localhost` avec le port par défaut `3000`.<br>

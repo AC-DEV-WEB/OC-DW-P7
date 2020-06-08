@@ -24,7 +24,8 @@ back-end/config/db.config.js
 Installation
 ============
 
-Installer `npm install`.<br>
-Démarrer `npm run dev` pour avoir accès au serveur de développement.<br>
+Clonez ce dépôt.<br>
+Depuis le dossier racine, exécutez `npm install`.<br>
+Exécutez ensuite le serveur avec `npm run dev`.<br>
 Rendez-vous sur `http://localhost:4200/`.<br>
 L'application va se recharger automatiquement si vous modifiez un fichier source.<br>
