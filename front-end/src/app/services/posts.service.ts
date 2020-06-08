@@ -30,12 +30,12 @@ export class PostsService {
   //
   // id: userID
   // postId: postId
-  public getOnePost(id: number, postId: number): Observable<any> {
-    return this.http.get<any>('http://localhost:3000/api/posts/'+id+'/'+postId);
+  public getOnePost(id: number, postId: number): Observable<Post> {
+    return this.http.get<Post>('http://localhost:3000/api/posts/'+id+'/'+postId);
   }
 
   // envoie une requête au serveur pour la création d'un nouveau post
-  public createNewPost(userId: number, author: string, title: string, content: string, imageUrl?: File): Observable<any> {
+  public createNewPost(userId: number, author: string, title: string, content: string, imageUrl?: File): Observable<Object> {
     if (imageUrl) {
       // on créé une nouvelle instance de Post
       const newPost = new Post();
@@ -51,7 +51,7 @@ export class PostsService {
       formData.append('post', JSON.stringify(newPost));
       formData.append('image', imageUrl);
 
-      return this.http.post<any>('http://localhost:3000/api/posts/create/', formData);
+      return this.http.post<Object>('http://localhost:3000/api/posts/create/', formData);
     } else {
       // on créé une nouvelle instance de Post
       const newPost = new Post();
@@ -66,7 +66,7 @@ export class PostsService {
 
       formData.append('post', JSON.stringify(newPost));
 
-      return this.http.post<any>('http://localhost:3000/api/posts/create/', formData);
+      return this.http.post<Object>('http://localhost:3000/api/posts/create/', formData);
     }
   }
 
@@ -74,8 +74,8 @@ export class PostsService {
   //
   // id: userId
   // postId: postId
-  public deletePost(id: number, postId: number): Observable<any> {
-    return this.http.delete<any>('http://localhost:3000/api/posts/delete/'+id+'/'+postId);
+  public deletePost(id: number, postId: number): Observable<Object> {
+    return this.http.delete<Object>('http://localhost:3000/api/posts/delete/'+id+'/'+postId);
   }
 
   // envoie une requête au serveur pour le like du post
@@ -83,8 +83,8 @@ export class PostsService {
   // id: userId
   // postId: postId
   // like: like 1 || 0
-  public likePost(id: number, postId: number, like: boolean): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: like ? 1 : 0 });
+  public likePost(id: number, postId: number, like: boolean): Observable<Object> {
+    return this.http.post<Object>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: like ? 1 : 0 });
   }
 
   // envoie une requête au serveur pour le dislike du post
@@ -92,8 +92,8 @@ export class PostsService {
   // id: userId
   // postId: postId
   // like: like -1 || 0
-  public dislikePost(id: number, postId: number, dislike: boolean): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: dislike ? -1 : 0 });
+  public dislikePost(id: number, postId: number, dislike: boolean): Observable<Object> {
+    return this.http.post<Object>('http://localhost:3000/api/posts/like/', { userId: id, postId: postId, like: dislike ? -1 : 0 });
   }
 
   // on transforme le subject "Post" en observable

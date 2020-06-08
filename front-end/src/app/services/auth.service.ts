@@ -96,16 +96,16 @@ export class AuthService {
   }
 
   // envoie une requête au serveur pour la modification du profile utilisateur
-  public editUserProfile(id: number, image: File): Observable<any> {
+  public editUserProfile(id: number, image: File): Observable<Object> {
     const formData = new FormData();
     formData.append('image', image);
     
-    return this.http.put<any>('http://localhost:3000/api/profile/edit/'+id, formData);
+    return this.http.put<Object>('http://localhost:3000/api/profile/edit/'+id, formData);
   }
 
   // envoie une requête au serveur pour la suppression du profile utilisateur
-  public deleteUserProfile(id: number): Observable<any> {    
-    return this.http.delete<any>('http://localhost:3000/api/profile/delete/'+id);
+  public deleteUserProfile(id: number): Observable<Object> {    
+    return this.http.delete<Object>('http://localhost:3000/api/profile/delete/'+id);
   }
 
   // on transforme le subject "User" en observable
