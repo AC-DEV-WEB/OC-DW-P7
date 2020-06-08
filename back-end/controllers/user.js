@@ -50,9 +50,9 @@ exports.login = (req, res, next) => {
 
         // on encode les données à l'intérieur du token avec une clé secrète
         let token = jwt.sign(
-          { userId: user.id },
-          'eyJ1c2VySWQiOjU2LCJpYXQiOjE1OTAxODUwMDYsImV4cCI6MTU5MDI3MTQwNn0',
-          { expiresIn: '24h' }
+          { userId: user.id }, // ID de l'utilisateur
+          'eyJ1c2VySWQiOjU2LCJpYXQiOjE1OTAxODUwMDYsImV4cCI6MTU5MDI3MTQwNn0', // clé secrète
+          { expiresIn: '24h' } // le token expire après 24H
         )
 
         // on définit le token au sein du header
