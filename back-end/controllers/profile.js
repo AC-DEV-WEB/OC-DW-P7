@@ -37,8 +37,6 @@ exports.editUser = (req, res, next) => {
         fs.unlink(`images/${filename}`, function (error) {
           if (error) throw error;
         });
-      } else {
-        return res.status(500).json({ error });
       }
 
       User.update({ imageUrl: imageUrl }, { where: { id : req.params.id } })

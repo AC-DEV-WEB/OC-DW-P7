@@ -17,7 +17,7 @@ Configuration
 ============
 Configuration de la connexion à la base de données MySQL :
 ```
-back-end/config/db.config.js
+config/db.config.js
 ```
 
 Installation

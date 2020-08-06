@@ -30,7 +30,7 @@
   </div>
 
   <!-- on affiche tous les posts -->
-  <div name="posts" id="posts" *ngFor="let post of posts">
+  <div name="post"*ngFor="let post of posts">
     <!-- on envoie les variables user et post au post.component -->
     <app-post [user]="user" [posts]="post"></app-post>
   </div>
