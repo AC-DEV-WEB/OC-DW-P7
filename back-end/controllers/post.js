@@ -24,7 +24,7 @@ const CommentLikes = db.CommentLikes;
 
 // création d'un post
 exports.createPost = (req, res, next) => {
-  // on traîte les données du coprs de la requête en objet JavaScript utilisable 
+  // on traîte les données du coprs de la requête en objet JavaScript utilisable
   let postObject = JSON.parse(req.body.post)
 
   // on vérife que l'utilisateur qui fait la requête exsite
@@ -51,13 +51,13 @@ exports.createPost = (req, res, next) => {
     .then(() => res.status(201).json({ message: 'Le nouveau post a été enregistré !' }))
     .catch(error => res.status(500).json({ error: 'Erreur lors de l\'enregistrement du post !' }));
   })
-  .catch(error => res.status(500).json({ error }));  
+  .catch(error => res.status(500).json({ error }));
 }
 
 // récupère tous les posts
 exports.getAllPosts = (req, res, next) => {
   // on tri les posts par ordre décroissant et on recupère les commentaires pour insérer dans la réponse
-  Post.findAll({ 
+  Post.findAll({
     order: Sequelize.literal('createdAt DESC'),
     include: [
       { model: Comment },
@@ -68,7 +68,7 @@ exports.getAllPosts = (req, res, next) => {
   .then(posts => {
     if(posts.length < 0) return res.status(404).json({ error: "Aucun posts trouvés !"});
 
-    res.status(200).json(posts)    
+    res.status(200).json(posts)
   })
   .catch(error => res.status(400).json({ error }));
 };
@@ -76,7 +76,7 @@ exports.getAllPosts = (req, res, next) => {
 // récupère les informations d'un post
 exports.getOnePost = (req, res, next) => {
   // on recupère les commentaires pour insérer dans la réponse
-  Post.findOne({ 
+  Post.findOne({
     where: { id: req.params.postId },
     include: [
       { model: Comment },
@@ -94,7 +94,7 @@ exports.getOnePost = (req, res, next) => {
 
 // modifie un post
 exports.editPost = (req, res, next) => {
-  // on traîte les données du coprs de la requête en objet JavaScript utilisable 
+  // on traîte les données du coprs de la requête en objet JavaScript utilisable
   let postObject = JSON.parse(req.body.post);
 
   // on contrôle s'il y a une nouvelle image
@@ -128,7 +128,7 @@ exports.editPost = (req, res, next) => {
       imageUrl: ''
     }
   }
- 
+
   // on met à jour le post
   Post.update({ id: postObject.id }, { ...postObject, id: postObject.id })
   .then(() => res.status(200).json({ message: 'Le post a été modifié !' }))
@@ -187,9 +187,9 @@ exports.deletePost = (req, res, next) => {
           { model: CommentLikes }
         ]
       })
-      .then(comments => {        
+      .then(comments => {
         // le post ne contient pas de commentaires
-        if(comments.length === 0) {         
+        if(comments.length === 0) {
           // on efface le post
           Post.destroy({ where: { id: req.params.postId} })
           .then(() => res.status(200).json({ message: 'Post supprimé !' }))
@@ -214,7 +214,7 @@ exports.deletePost = (req, res, next) => {
       })
       .catch(error => res.status(400).json({ error }));
     })
-    .catch(error => res.status(500).json({ error })); 
+    .catch(error => res.status(500).json({ error }));
   })
   .catch(error => res.status(500).json({ error }));
 }
@@ -231,7 +231,7 @@ exports.likeOnePost = (req, res, next) => {
     if (like === 0) {
       PostLikes.findOne({ where: { postId: postId, userId: userId } })
       .then(postLikes => {
-       
+
         // on supprime le like/dislike
         if (postLikes.userId === userId) {
           PostLikes.destroy({ where: { postId: postId, userId: userId } })

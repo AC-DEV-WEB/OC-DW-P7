@@ -39,7 +39,7 @@ export class PostComponent implements OnInit {
 
     // on cache les commentaires
     this.showComment = false;
-    
+
     // on compte le nombre de likes/dislikes par utilisateur pour chaque like ou dislike dans le tableau Posts_Likes
     this.posts.Posts_Likes.forEach(like => {
       if (like.likes === 1) {
@@ -60,7 +60,7 @@ export class PostComponent implements OnInit {
   onShowModal() {
     this.showModal = true;
   }
-  
+
   // on cache le modal
   onCloseModal() {
     this.showModal = false;
@@ -109,7 +109,7 @@ export class PostComponent implements OnInit {
     if (ext === 'webm') {
       return true
     } else {
-      return false 
+      return false
     }
   }
 
@@ -142,7 +142,7 @@ export class PostComponent implements OnInit {
   onDislike() {
     this.post.dislikePost(this.user.id, this.posts.id, !this.disliked).subscribe((res: { message: string }) => {
       console.log(res.message);
-      
+
       this.disliked = !this.disliked
 
       // on met à jour le post

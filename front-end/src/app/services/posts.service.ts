@@ -47,7 +47,7 @@ export class PostsService {
 
       // on formate les données
       const formData = new FormData();
-      
+
       formData.append('post', JSON.stringify(newPost));
       formData.append('image', imageUrl);
 

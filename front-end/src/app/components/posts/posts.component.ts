@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PostsService } from '../../services/posts.service';
-import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from '../../models/User.model';
 import { Post } from '../../models/Post.model';
@@ -18,20 +16,16 @@ export class PostsComponent implements OnInit {
   public userSubscription: Subscription;
   public posts: Post[];
   public postsSubscription: Subscription;
-  public isLikes: boolean;
-  public isUsersLiked: boolean;
-  public isUsersDislked: boolean;
   public loading: boolean;
 
-  constructor(private formBuilder: FormBuilder, 
-    private auth: AuthService, 
-    private post: PostsService, 
-    private router: Router, 
-    private route: ActivatedRoute) { this.post.getAllPosts() }
+  constructor(
+    private auth: AuthService,
+    private post: PostsService,
+  ) { this.post.getAllPosts() }
 
   ngOnInit() {
     this.loading = true;
-    
+
     // on souscrit à la valeur du subject "User" en tant qu'observable quand on initialise la page
     this.userSubscription = this.auth.getUser().subscribe((res: User) => {
       if (res !== undefined && res !== null) {
